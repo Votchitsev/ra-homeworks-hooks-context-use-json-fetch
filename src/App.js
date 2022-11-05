@@ -6,21 +6,28 @@ function useJsonFetch(url) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(null);
 
-  useEffect(() => {
+  const execute = () => {
+    setData(null);
+    setError(null);
     setLoading(true);
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          setError(response.status)
-          return response.json()
-        }
 
+    return fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        setError(response.status)
         return response.json()
-      })
-      .then(json => {
-        setData(json);
-        setLoading(false);
-      })
+      }
+
+      return response.json()
+    })
+    .then(json => {
+      setData(json);
+      setLoading(false);
+    })
+  }
+
+  useEffect(() => {
+    execute();
   }, [])
 
   return [
